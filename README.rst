@@ -28,4 +28,11 @@ TODO
 
 Examples
 ========
+
+Find ISBNs in a string
+----------------------
+TODO
+
+Find ISBNs in a pdf file
+------------------------
 TODO
