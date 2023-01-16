@@ -217,33 +217,33 @@ they are matched with the regular expression `isbn_blacklist_regex <#script-opti
 
 By `default <#script-options>`__, the extracted ISBNs are separated by newlines, ``\n``.
 
-`:information_source:`
+`:information_source:` Multiple-lines string
 
-  If you want to search ISBNs in a **multiple-lines string**, e.g. you copied
-  many pages from a document, you must follow ``find_isbns`` with a
-  backslash ``\`` and enclose the string within **double quotes**, like so:
-  
-  .. code-block:: terminal
+If you want to search ISBNs in a **multiple-lines string**, e.g. you copied
+many pages from a document, you must follow ``find_isbns`` with a
+backslash ``\`` and enclose the string within **double quotes**, like so:
 
-     $ find_isbns \
-     "
-     978-159420172-1
-     
-     blablabla
-     blablabla
-     blablabla
-     
-     978-1892391810
-     0000000000 0123456789 
-     
-     blablabla
-     blablabla
-     blablabla
-     
-     1111111111
-     blablabla
-     blablabla
-     "
+.. code-block:: terminal
+
+   $ find_isbns \
+   "
+   978-159420172-1
+
+   blablabla
+   blablabla
+   blablabla
+
+   978-1892391810
+   0000000000 0123456789 
+
+   blablabla
+   blablabla
+   blablabla
+
+   1111111111
+   blablabla
+   blablabla
+   "
 
 Find ISBNs in a pdf file
 ------------------------
