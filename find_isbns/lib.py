@@ -323,7 +323,7 @@ def epubtxt(input_file, output_file):
 
 
 def extract_archive(input_file, output_file):
-    cmd = f'7z x -o "{output_file}" "{input_file}"'
+    cmd = f'7z x -o"{output_file}" "{input_file}"'
     args = shlex.split(cmd)
     result = subprocess.run(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     return convert_result_from_shell_cmd(result)
@@ -430,12 +430,10 @@ def get_all_isbns_from_archive(
                      'Removing tmp dir...')
         logger.debug(result.stderr)
         remove_tree(tmpdir)
-        # TODO: return None?
         return ''
-
     logger.debug(f"Archive extracted successfully in '{tmpdir}', scanning "
                  f"contents recursively...")
-    # TODO: ref.: https://stackoverflow.com/a/2759553
+    # TODO: Ref.: https://stackoverflow.com/a/2759553
     # TODO: ignore .DS_Store
     for path, dirs, files in os.walk(tmpdir, topdown=False):
         # TODO: they use flag options for sorting the directory contents
@@ -444,16 +442,11 @@ def get_all_isbns_from_archive(
             # TODO: add debug_prefixer
             file_to_check = os.path.join(path, file_to_check)
             isbns = search_file_for_isbns(file_to_check, **func_params)
-            # TODO: important, remove next lines
-            """
-            isbns = search_file_for_isbns(file_to_check, isbn_direct_files,
-                                          isbn_ignored_files, ocr_enabled)
-            """
             if isbns:
-                logger.debug(f"Found ISBNs '{isbns}'!")
+                logger.debug(f"Found ISBNs\n{isbns}")
                 # TODO: two prints, one for stderror and the other for stdout
                 logger.debug(isbns.replace(isbn_ret_separator, '\n'))
-                for isbn in isbns.split(','):
+                for isbn in isbns.split(isbn_ret_separator):
                     if isbn not in all_isbns:
                         all_isbns.append(isbn)
             logger.debug(f'Removing {file_to_check}...')
@@ -809,15 +802,16 @@ def search_file_for_isbns(
     logger.debug(f'Ebook metadata:\n{ebookmeta.stdout}')
     isbns = find_isbns(ebookmeta.stdout, **func_params)
     if isbns:
-        logger.debug(f"Extracted ISBNs '{isbns}' from calibre ebook metadata!")
+        logger.debug(f"Extracted ISBNs from calibre ebook metadata:\n{isbns}'")
         return isbns
 
     # Step 5: decompress with 7z
     logger.debug('decompress with 7z')
-    isbns = get_all_isbns_from_archive(file_path, **func_params)
-    if isbns:
-        logger.debug(f"Extracted ISBNs '{isbns}' from the archive file")
-        return isbns
+    if not mime_type.startswith('application/epub+zip'):
+        isbns = get_all_isbns_from_archive(file_path, **func_params)
+        if isbns:
+            logger.debug(f"Extracted ISBNs from the archive file:\n{isbns}")
+            return isbns
 
     # Step 6: convert file to .txt
     try_ocr = False
@@ -841,7 +835,7 @@ def search_file_for_isbns(
             data = reorder_file_content(tmp_file_txt, **func_params)
             isbns = find_isbns(data, **func_params)
             if isbns:
-                logger.debug(f"Text output contains ISBNs '{isbns}'!")
+                logger.debug(f"Text output contains ISBNs:\n{isbns}")
             elif ocr_enabled == 'always':
                 logger.debug('We will try OCR because the successfully converted '
                              'text did not have any ISBNs')
@@ -854,7 +848,7 @@ def search_file_for_isbns(
         try_ocr = True
 
     # Step 7: OCR the file
-    if not isbns and ocr_enabled and try_ocr:
+    if not isbns and ocr_enabled != 'false' and try_ocr:
         logger.debug('Trying to run OCR on the file...')
         if ocr_file(file_path, tmp_file_txt, mime_type, **func_params) == 0:
             logger.debug('OCR was successful, checking the result...')
@@ -871,7 +865,7 @@ def search_file_for_isbns(
     remove_file(tmp_file_txt)
 
     if isbns:
-        logger.debug(f"Returning the found ISBNs '{isbns}'!")
+        logger.debug(f"Returning the found ISBNs:\n{isbns}")
     else:
         logger.debug(f'Could not find any ISBNs in {file_path} :(')
 
