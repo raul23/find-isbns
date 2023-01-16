@@ -307,7 +307,7 @@ Signature of the function `find() <https://github.com/raul23/find-isbns/blob/787
 
 By default when using the API, the loggers are disabled. If you want to enable them, call the
 function ``setup_log()`` (with the desired log level in all caps) at the beginning of your code before 
-the conversion function ``convert()``:
+the function ``find()``:
 
 .. code-block:: python
 
