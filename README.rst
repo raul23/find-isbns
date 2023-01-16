@@ -334,7 +334,7 @@ The last sequence ``1000100111`` was found in the middle of the document and is
 not an ISBN even though it is a technically valid but wrong ISBN that the
 regular expression `isbn_blacklist_regex <#script-options>`_ didn't catch.
 
-`:information:` If the *pdf* file was made up of images, then the OCR can be applied like this::
+`:information_source:` If the *pdf* file was made up of images, then the OCR can be applied like this::
 
  $ find_isbns ~/Data/convert/Book.pdf --ocr true
 
