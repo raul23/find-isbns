@@ -22,6 +22,8 @@ related to finding ISBNs from ebooks.
 - `split-ebooks-into-folders <https://github.com/raul23/split-ebooks-into-folders>`_: split the supplied ebook files into 
   folders with consecutive names
 
+|
+
 .. contents:: **Contents**
    :depth: 3
    :local:
