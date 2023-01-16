@@ -136,8 +136,8 @@ Here are the steps followed by ``find_isbns`` to find ISBNs in files or string:
    v. If the conversion failed and OCR is enabled, OCR is run on the file and the resultant text file
       is searched for ISBNs
       
-`:important`: When searching the content of an ebook, by default, the first 400 lines are searched first for any
-ISBNs, then the last 50 lines ***in reverse**, and finally the middle. This is done in order to maximize the chances that
+`:important:` When searching the content of an ebook, by default, the first 400 lines are searched first for any
+ISBNs, then the last 50 lines **in reverse**, and finally the middle. This is done in order to maximize the chances that
 the extracted ISBNs are really related to the given book analyzed and not from other books mentioned in the middle of the text.
 
 For more details, see:
