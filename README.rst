@@ -278,21 +278,21 @@ you can choose your own separator.
 
 Signature of the function ``find()``:
 
- .. code-block:: python
- 
-    find(input_data, isbn_blacklist_regex=ISBN_BLACKLIST_REGEX,
-         isbn_direct_files=ISBN_DIRECT_FILES,
-         isbn_reorder_files=[400, 50],
-         isbn_ignored_files=ISBN_IGNORED_FILES,
-         isbn_regex=ISBN_REGEX,
-         isbn_ret_separator='\n',
-         djvu_convert_method=DJVU_CONVERT_METHOD,
-         epub_convert_method=EPUB_CONVERT_METHOD,
-         pdf_convert_method=PDF_CONVERT_METHOD,
-         ocr_command=OCR_COMMAND,
-         ocr_enabled='false',
-         ocr_only_first_last_pages=(7, 3),
-         **kwargs)
+.. code-block:: python
+
+   find(input_data, isbn_blacklist_regex=ISBN_BLACKLIST_REGEX,
+        isbn_direct_files=ISBN_DIRECT_FILES,
+        isbn_reorder_files=[400, 50],
+        isbn_ignored_files=ISBN_IGNORED_FILES,
+        isbn_regex=ISBN_REGEX,
+        isbn_ret_separator='\n',
+        djvu_convert_method=DJVU_CONVERT_METHOD,
+        epub_convert_method=EPUB_CONVERT_METHOD,
+        pdf_convert_method=PDF_CONVERT_METHOD,
+        ocr_command=OCR_COMMAND,
+        ocr_enabled='false',
+        ocr_only_first_last_pages=(7, 3),
+        **kwargs)
 
 By default when using the API, the loggers are disabled. If you want to enable them, call the
 function ``setup_log()`` (with the desired log level in all caps) at the beginning of your code before 
