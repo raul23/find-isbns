@@ -12,7 +12,7 @@ from argparse import Namespace
 from pathlib import Path
 from types import SimpleNamespace
 
-from convert_to_txt import __version__
+from find_isbns import __version__
 
 # import ipdb
 
