@@ -275,4 +275,8 @@ regular expression `isbn_blacklist_regex <#script-options>`_ didn't catch.
 
 Cases tested
 ============
-TODO
+- *pdf* documents 
+- *djvu* documents 
+- *epub* documents
+- image using the ``--ocr true`` option
+- *zip* archives with duplicate documents
