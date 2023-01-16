@@ -155,7 +155,7 @@ To display the script `find_isbns.py <./find_isbns/scripts/find_isbns.py>`_ list
      input_data                                      Can either be the path to a file or a string (enclose it within single or double 
                                                      quotes if it contains spaces). The input will be searched for ISBNs.
 
-`:information_source:` 
+`:information_source:` Explaining some of the options/arguments
 
 - Since the program ``find_isbns`` is based on the shell suite of scripts `ebook-tools <https://github.com/na--/ebook-tools>`_, the descriptions for the options are from ``ebook-tools``.
 - The input string must be enclosed within single or double quotes if it contains *spaces*, like so::
