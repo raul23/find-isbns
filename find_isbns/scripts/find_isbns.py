@@ -293,16 +293,17 @@ def setup_argparser():
         dest='ocr_only_first_last_pages', metavar='PAGES', nargs=2,
         default=OCR_ONLY_FIRST_LAST_PAGES,
         help='''Value 'n m' instructs the script to convert only the
-            first n and last m pages when OCR-ing ebooks.'''
+             first n and last m pages when OCR-ing ebooks.'''
              + get_default_message(str(OCR_ONLY_FIRST_LAST_PAGES).strip('(|)').replace(',', '')))
     # =====
     # Input
     # =====
-    input_output_files_group = parser.add_argument_group(
+    input_files_group = parser.add_argument_group(
         title=yellow('Input data'))
-    input_output_files_group.add_argument(
+    input_files_group.add_argument(
         name_input, nargs='?',
-        help='Can either be the path to a file or a string. The input will be '
+        help='Can either be the path to a file or a string (enclose it within '
+             'single or double quotes if it contains spaces). The input will be '
              'searched for ISBNs.')
     return parser
 
@@ -337,7 +338,8 @@ def main():
             args_dict['isbn_reorder_files'][0] = int(args_dict['isbn_reorder_files'][0])
             args_dict['isbn_reorder_files'][1] = int(args_dict['isbn_reorder_files'][1])
         if not error:
-            exit_code = find(**args_dict)
+            retval = find(**args_dict)
+            exit_code = 0 if retval else retval
     except KeyboardInterrupt:
         print_(yellow('\nProgram stopped!'))
         exit_code = 2
