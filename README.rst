@@ -107,6 +107,9 @@ To display the script `find_isbns.py <./find_isbns/scripts/find_isbns.py>`_ list
    Input data:
      input_data                                      Can either be the path to a file or a string. The input will be searched for ISBNs.
 
+`:information_source:` Since the script ``find_isbns`` is based on `ebook-tools <https://github.com/na--/ebook-tools>`_, the descriptions
+for the options are from ``ebook-tools``.
+
 Examples
 ========
 
