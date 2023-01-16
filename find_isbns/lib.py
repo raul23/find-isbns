@@ -265,6 +265,9 @@ def find(input_data, isbn_blacklist_regex=ISBN_BLACKLIST_REGEX,
          isbn_ignored_files=ISBN_IGNORED_FILES,
          isbn_regex=ISBN_REGEX,
          isbn_ret_separator=ISBN_RET_SEPARATOR,
+         djvu_convert_method=DJVU_CONVERT_METHOD,
+         epub_convert_method=EPUB_CONVERT_METHOD,
+         pdf_convert_method=PDF_CONVERT_METHOD,
          ocr_command=OCR_COMMAND,
          ocr_enabled=OCR_ENABLED,
          ocr_only_first_last_pages=OCR_ONLY_FIRST_LAST_PAGES,
@@ -282,6 +285,7 @@ def find(input_data, isbn_blacklist_regex=ISBN_BLACKLIST_REGEX,
             logger.debug(f'The input data might be a string')
             isbns = find_isbns(input_data, **func_params)
     except OSError as e:
+        # Happens for example if ebook-metas instead of ebook-meta ("No such file or directory: 'ebook-metas'")
         if e.args[0]:
             logger.debug(f'{e.args[1]}: the input data might be a string')
             isbns = find_isbns(input_data, **func_params)
@@ -391,7 +395,7 @@ def get_all_isbns_from_archive(
 
 def get_ebook_metadata(file_path):
     # TODO: add `ebook-meta` in PATH, right now it is only working for mac
-    cmd = f'ebook-meta "{file_path}"'
+    cmd = f'ebook-metas "{file_path}"'
     args = shlex.split(cmd)
     result = subprocess.run(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     return convert_result_from_shell_cmd(result)
@@ -722,6 +726,9 @@ def search_file_for_isbns(
         isbn_reorder_files=ISBN_REORDER_FILES,
         isbn_ignored_files=ISBN_IGNORED_FILES, isbn_regex=ISBN_REGEX,
         isbn_ret_separator=ISBN_RET_SEPARATOR, ocr_command=OCR_COMMAND,
+        djvu_convert_method=DJVU_CONVERT_METHOD,
+        epub_convert_method=EPUB_CONVERT_METHOD,
+        pdf_convert_method=PDF_CONVERT_METHOD,
         ocr_enabled=OCR_ENABLED,
         ocr_only_first_last_pages=OCR_ONLY_FIRST_LAST_PAGES, **kwargs):
     func_params = locals().copy()
@@ -755,12 +762,15 @@ def search_file_for_isbns(
 
     # Step 4: check the file metadata from calibre's `ebook-meta` for ISBNs
     logger.debug("check the file metadata from calibre's `ebook-meta` for ISBNs")
-    ebookmeta = get_ebook_metadata(file_path)
-    logger.debug(f'Ebook metadata:\n{ebookmeta.stdout}')
-    isbns = find_isbns(ebookmeta.stdout, **func_params)
-    if isbns:
-        logger.debug(f"Extracted ISBNs from calibre ebook metadata:\n{isbns}'")
-        return isbns
+    if command_exists('ebook-metadata'):
+        ebookmeta = get_ebook_metadata(file_path)
+        logger.debug(f'Ebook metadata:\n{ebookmeta.stdout}')
+        isbns = find_isbns(ebookmeta.stdout, **func_params)
+        if isbns:
+            logger.debug(f"Extracted ISBNs from calibre ebook metadata:\n{isbns}'")
+            return isbns
+    else:
+        logger.debug("`ebook-metadata` is not found!")
 
     # Step 5: decompress with 7z
     logger.debug('decompress with 7z')
@@ -777,7 +787,7 @@ def search_file_for_isbns(
     logger.debug(f"Temp file: {tmp_file_txt}")
 
     # TODO: important, takes a long time for pdfs (not djvu)
-    result = convert_to_txt(file_path, tmp_file_txt, mime_type)
+    result = convert_to_txt(file_path, tmp_file_txt, mime_type, **func_params)
     if result.returncode == 0:
         logger.debug('Conversion to text was successful, checking the result...')
         with open(tmp_file_txt, 'r') as f:
