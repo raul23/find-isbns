@@ -273,7 +273,7 @@ To find ISBNs in a string using the API:
 
  '9781892391810 - 9781594201721'
  
-By `default <#script-options>`_, the extracted ISBNs are separated by '\n'. However, with the parameter ``isbn_ret_separator``
+By `default <#script-options>`_, the extracted ISBNs are separated by '\\n'. However, with the parameter ``isbn_ret_separator``
 you can choose your own separator.
 
 Signature of the function `find() <https://github.com/raul23/find-isbns/blob/7872ae9ead02d2976f4df81afa8e19755e451b1b/find_isbns/lib.py#L262>`_:
