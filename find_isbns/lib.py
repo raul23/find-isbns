@@ -752,7 +752,7 @@ def search_file_for_isbns(
         data = reorder_file_content(file_path, **func_params)
         isbns = find_isbns(data, **func_params)
         if isbns:
-            logger.debug(f"Extracted ISBNs '{isbns}' from the text file contents!")
+            logger.debug(f"Extracted ISBNs from the text file contents:\n{isbns}")
         else:
             logger.debug('Did not find any ISBNs')
         return isbns
