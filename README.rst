@@ -27,7 +27,7 @@ This is the environment on which the script `find_isbns.py <./find_isbns/scripts
   
   `:warning:` OCR is a slow resource-intensive process. Hence, by default only the first 7 and last 3 pages are OCRed through the option
   ``--ocr-only-first-last-pages``. More info at `Script options <#script-options>`_.
-* `Ghostscript <https://www.ghostscript.com/>`_: ``gs`` converts *pdf* to *png*
+* `Ghostscript <https://www.ghostscript.com/>`_: ``gs`` converts *pdf* to *png* (useful for OCR)
 * `DjVuLibre <http://djvu.sourceforge.net/>`_: 
 
   - it includes ``ddjvu`` for converting *djvu* to *tif* image (useful for OCR), and ``djvused`` to get number of pages from a *djvu* document
