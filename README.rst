@@ -118,6 +118,28 @@ To display the script `find_isbns.py <./find_isbns/scripts/find_isbns.py>`_ list
 
 How the script ``find_isbns`` finds ISBN
 ========================================
+As stated from `ebook-tools <https://github.com/na--/ebook-tools>`_ (shell scripts from ``find_isbns.py`` was ported)::
+
+ "Searching for ISBNs in files uses progressively more resource-intensive methods until some ISBNs are found."
+
+Here are the steps followed by ``find_isbns`` to find ISBNs in files or string:
+
+1. If the input data is a string, it is searched for any ISBN-like sequences using a regex, duplicates are removed and
+   finally the found ISBNs are validated and returned separated by the user's specified separator or default one ('\n').
+2. If the input is a file, the situation is a lot more complex since different methods are used starting from simples
+   ones and ending with more complicated ones:
+   
+   i. The filename is checked for ISBNs
+   ii. The file metadata is searched for ISBNs with calibre's ``ebook-meta``
+   iii. If the document is an archive, its files are extracted with ``7z`` and are each searched for ISBNs
+   iv. If the document is not an archive, it is converted to *txt* and the data is searched for ISBNs
+   v. If the conversion failed and OCR is enabled, OCR is run on the file and the resultant text file
+      is searched for ISBNs
+      
+`:important`: When searching the content of an ebook, by default, the first 400 lines are searched first for any
+ISBNs, then the last 50 lines ***in reverse**, and finally the middle. This is done in order to maximize the chances that
+the extracted ISBNs are really related to the given book analyzed and not from other books mentioned in the middle of the text.
+
 For more details, see:
 
 - The `documentation <https://github.com/na--/ebook-tools#searching-for-isbns-in-files>`_ for ``ebook-tools`` (shell scripts) or
