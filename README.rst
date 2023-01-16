@@ -332,7 +332,7 @@ To find ISBNs in a given document using the API:
    isbns = find(os.path.expanduser('~/Data/convert/Archive2.zip'))
    # Do something with `isbns`
 
-`:information_source:` 
+`:information_source:` Explaining the snippet of code
 
 - The variable ``isbns`` will contain the ISBNs found in the input *zip* archive.
 - If the *pdf* file was made up of images, then the OCR can be applied by setting the parameter ``ocr_enabled`` to 'true'
