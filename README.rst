@@ -125,7 +125,7 @@ As stated from `ebook-tools <https://github.com/na--/ebook-tools>`_ (shell scrip
 Here are the steps followed by ``find_isbns`` to find ISBNs in files or string:
 
 1. If the input data is a string, it is searched for any ISBN-like sequences using a regex, duplicates are removed and
-   finally the found ISBNs are validated and returned separated by the user's specified separator or default one ('\n').
+   finally the found ISBNs are validated and returned separated by the user's specified separator or default one ('\\n').
 2. If the input is a file, the situation is a lot more complex since different methods are used starting from simples
    ones and ending with more complicated ones:
    
