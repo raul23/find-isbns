@@ -164,8 +164,8 @@ To display the script `find_isbns.py <./find_isbns/scripts/find_isbns.py>`_ list
 
    $ find_isbns '978-159420172-1 978-1892391810 0000000000 0123456789 1111111111'
 
-How the script ``find_isbns`` finds ISBN
-========================================
+How the script ``find_isbns`` extracts ISBNs from an input file or string
+=========================================================================
 As stated from `ebook-tools <https://github.com/na--/ebook-tools>`_ (shell scripts from which ``find_isbns.py`` was ported)::
 
  "Searching for ISBNs in files uses progressively more resource-intensive methods until some ISBNs are found."
