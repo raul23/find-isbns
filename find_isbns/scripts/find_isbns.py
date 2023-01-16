@@ -222,7 +222,6 @@ def setup_argparser():
             discarded. The idea is to ignore technically valid but probably wrong
             numbers like 0123456789, 0000000000, 1111111111, etc..'''
              + get_default_message(ISBN_BLACKLIST_REGEX))
-    # TODO: important don't use grep in name of option
     find_group.add_argument(
         "--isbn-direct-files", dest='isbn_direct_files',
         metavar='REGEX', default=ISBN_DIRECT_FILES,
@@ -238,7 +237,6 @@ def setup_argparser():
             beyond their filename. By default, it tries to make the subcommands
             ignore .gif and .svg images, audio, video and executable files and
             fonts.''' + get_default_message(ISBN_IGNORED_FILES))
-    # TODO: important don't use grep in name of option since we are searching w/o it
     # TODO: test this option (1 or 2 args)
     find_group.add_argument(
         "--reorder-files", dest='isbn_reorder_files', nargs='+',
