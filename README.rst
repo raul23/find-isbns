@@ -22,23 +22,30 @@ This is the environment on which the script `find_isbns.py <./find_isbns/scripts
 
 * **Platform:** macOS
 * **Python**: version **3.7**
-* `textutil <https://ss64.com/osx/textutil.html>`_ or `catdoc <http://www.wagner.pp.ru/~vitus/software/catdoc/>`_: for converting *doc* to *txt*
+* `Tesseract <https://github.com/tesseract-ocr/tesseract>`_ for running OCR on books - version 4 gives 
+  better results. 
+  
+  `:warning:` OCR is a slow resource-intensive process. Hence, use the option ``-p PAGES`` to specify the pages
+  that you want to apply OCR. More info at `Script options <#script-options>`_.
+* `Ghostscript <https://www.ghostscript.com/>`_: ``gs`` converts *pdf* to *png*
+* `DjVuLibre <http://djvu.sourceforge.net/>`_: 
 
-  **NOTE:** On macOS, you don't need ``catdoc`` since it has the built-in ``textutil``
-  command-line tool that converts any *txt*, *html*, *rtf*, 
-  *rtfd*, *doc*, *docx*, *wordml*, *odt*, or *webarchive* file
-* `DjVuLibre <http://djvu.sourceforge.net/>`_: it includes ``djvutxt`` for 
-  converting *djvu* to *txt*
+  - it includes ``ddjvu`` for converting *djvu* to *tif* image (useful for OCR), and ``djvused`` to get number of pages from a *djvu* document
+  - it includes ``djvutxt`` for converting *djvu* to *txt*
   
-  `:warning:` 
+    `:warning:` 
   
-  - To access the *djvu* command line utilities and their documentation, you must set the shell variable ``PATH`` and ``MANPATH`` appropriately. This can be achieved by invoking a convenient shell script hidden inside the application bundle::
+    - To access the *djvu* command line utilities and their documentation, you must set the shell variable ``PATH`` and ``MANPATH`` appropriately. 
+      This can be achieved by invoking a convenient shell script hidden inside the application bundle::
   
-     $ eval `/Applications/DjView.app/Contents/setpath.sh`
+       $ eval `/Applications/DjView.app/Contents/setpath.sh`
    
-    **Ref.:** ReadMe from DjVuLibre
-  - You need to softlink ``djvutxt`` in ``/user/local/bin`` (or add it in ``$PATH``)
-* `poppler <https://poppler.freedesktop.org/>`_: it includes ``pdftotext`` for converting *pdf* to *txt*
+      **Ref.:** ReadMe from DjVuLibre
+    - You need to softlink ``djvutxt`` in ``/user/local/bin`` (or add it in ``$PATH``)
+* `poppler <https://poppler.freedesktop.org/>`_: 
+
+  - it includes ``pdftotext`` for converting *pdf* to *txt*
+  - it includes ``pdfinfo`` to get number of pages from a *pdf* document if `mdls (macOS) <https://ss64.com/osx/mdls.html>`_ is not found.
 
 `:information_source:` *epub* is converted to *txt* by using ``unzip -c {input_file}``
 
@@ -46,10 +53,13 @@ This is the environment on which the script `find_isbns.py <./find_isbns/scripts
 
 **Optionally:**
 
-- `calibre <https://calibre-ebook.com/>`_: for converting {*pdf*, *djvu*, *epub*, *msword*} to *txt* by using calibre's own 
-  `ebook-convert <https://manual.calibre-ebook.com/generated/en/ebook-convert.html>`_
+- `calibre <https://calibre-ebook.com/>`_: 
+
+  - for converting {*pdf*, *djvu*, *epub*, *msword*} to *txt* by using calibre's own 
+    `ebook-convert <https://manual.calibre-ebook.com/generated/en/ebook-convert.html>`_
   
-  `:warning:` ``ebook-convert`` is slower than the other conversion tools (``textutil``, ``catdoc``, ``pdftotext``, ``djvutxt``)
+    `:warning:` ``ebook-convert`` is slower than the other conversion tools (``textutil``, ``catdoc``, ``pdftotext``, ``djvutxt``)
+  - for getting an ebook's metadata with ``ebook-metadata`` in order to search it for ISBNs
 
 Installation
 ============
