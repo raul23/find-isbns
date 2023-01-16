@@ -4,9 +4,9 @@ Find ISBNs from ebooks (pdf, djvu, epub)
 The script `find_isbns <./find_isbns/scripts/find_isbns.py>`_ finds ISBNs from ebooks (pdf, djvu, epub) or any string given as input 
 to the script . 
 
-Searching for ISBNs in files uses progressively more resource-intensive methods until some ISBNs are found.
+It is based on the great `ebook-tools <https://github.com/na--/ebook-tools>`_ which is written in shell by `na-- <https://github.com/na-->`_:
 
-It is based on the great `ebook-tools <https://github.com/na--/ebook-tools>`_ which is written in shell by `na-- <https://github.com/na-->`_.
+ "Searching for ISBNs in files uses progressively more resource-intensive methods until some ISBNs are found."
 
 Thus, `find_isbns <./find_isbns>`_ is a Python port of the parts of the shell scripts from ``ebook-tools`` that are 
 related to finding ISBNs from ebooks.
