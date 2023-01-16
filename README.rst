@@ -213,7 +213,7 @@ Find ISBNs in the string ``'978-159420172-1 978-1892391810 0000000000 0123456789
 
    $ find_isbns '978-159420172-1 978-1892391810 0000000000 0123456789 1111111111'
 
-The input string must be enclosed within single or double quotes.
+If the input string must be enclosed within single or double quotes.
 
 **Output:**
 
