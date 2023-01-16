@@ -257,7 +257,6 @@ def convert(input_file, output_file=None,
 # for pdfs, catdoc for word files and djvutxt for djvu files.
 # Ref.: https://bit.ly/2HXdf2I
 def convert_to_txt(input_file, output_file, mime_type,
-                   convert_pages=CONVERT_PAGES,
                    djvu_convert_method=DJVU_CONVERT_METHOD,
                    epub_convert_method=EPUB_CONVERT_METHOD,
                    msword_convert_method=MSWORD_CONVERT_METHOD,
@@ -265,7 +264,7 @@ def convert_to_txt(input_file, output_file, mime_type,
     if mime_type.startswith('image/vnd.djvu') \
          and djvu_convert_method == 'djvutxt' and command_exists('djvutxt'):
         logger.debug('The file looks like a djvu, using djvutxt to extract the text')
-        result = djvutxt(input_file, output_file, pages=convert_pages)
+        result = djvutxt(input_file, output_file)
     elif mime_type.startswith('application/epub+zip') \
             and epub_convert_method == 'epubtxt' and command_exists('unzip'):
         logger.debug('The file looks like an epub, using epubtxt to extract the text')
@@ -283,44 +282,7 @@ def convert_to_txt(input_file, output_file, mime_type,
     elif mime_type == 'application/pdf' and pdf_convert_method == 'pdftotext' \
             and command_exists('pdftotext'):
         logger.debug('The file looks like a pdf, using pdftotext to extract the text')
-        text = ''
-        logger.debug(f'These are all the pages that need to be converted: {convert_pages}')
-        for p in convert_pages.split(','):
-            if '-' in p:
-                p1, p2 = p.split('-')
-                p1 = int(p1)
-                p2 = int(p2)
-                if p1 > p2:
-                    pages_to_process = sorted(range(p2, p1 + 1), reverse=True)
-                else:
-                    pages_to_process = sorted(range(p1, p2 + 1))
-            else:
-                pages_to_process = [int(p)]
-            logger.debug(f'Pages to process: {pages_to_process}')
-            for i, page_to_process in enumerate(pages_to_process, start=1):
-                logger.debug(f'Processing page {i} of {len(pages_to_process)}')
-                logger.debug(f'Page number: {page_to_process}')
-                tmp_file_txt = tempfile.mkstemp(suffix='.txt')[1]
-                logger.debug(f'Using tmp file {tmp_file_txt}')
-                result = pdftotext(input_file, tmp_file_txt,
-                                   first_page_to_convert=page_to_process,
-                                   last_page_to_convert=page_to_process)
-                if result.returncode == 0:
-                    logger.debug(f"Result of 'pdftotext':\n{result}")
-                    with open(tmp_file_txt, 'r') as f:
-                        data = f.read()
-                        # logger.debug(f"Text content of page {page_to_process}:\n{data}")
-                    text += data
-                else:
-                    msg = red(f"Document couldn't be converted to txt: {result}")
-                    logger.error(f'{msg}')
-                    logger.error(f'Skipping current page ({page_to_process})')
-                # Remove temporary file
-                logger.debug('Cleaning up tmp file')
-                remove_file(tmp_file_txt)
-        logger.debug('Saving the text content')
-        with open(output_file, 'w') as f:
-            f.write(text)
+        result = pdftotext(input_file, output_file)
     elif (not mime_type.startswith('image/vnd.djvu')) \
             and mime_type.startswith('image/'):
         msg = f'The file looks like a normal image ({mime_type}), skipping ' \
@@ -387,8 +349,6 @@ def find(input_data, isbn_blacklist_regex=ISBN_BLACKLIST_REGEX,
     try:
         if Path(input_data).is_file():
             logger.debug(f'The input data is a file path')
-            logger.info(f"Searching file '{Path(input_data).name}' for "
-                        "ISBN numbers...")
             isbns = search_file_for_isbns(input_data, **func_params)
         else:
             logger.debug(f'The input data is a string')
