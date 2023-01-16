@@ -25,7 +25,7 @@ This is the environment on which the script `find_isbns.py <./find_isbns/scripts
 * `Tesseract <https://github.com/tesseract-ocr/tesseract>`_ for running OCR on books - version 4 gives 
   better results. 
   
-  `:warning:` OCR is a slow resource-intensive process. Hence, by default only first 7 and last 3 pages are OCRed through the option
+  `:warning:` OCR is a slow resource-intensive process. Hence, by default only the first 7 and last 3 pages are OCRed through the option
   ``--ocr-only-first-last-pages``. More info at `Script options <#script-options>`_.
 * `Ghostscript <https://www.ghostscript.com/>`_: ``gs`` converts *pdf* to *png*
 * `DjVuLibre <http://djvu.sourceforge.net/>`_: 
