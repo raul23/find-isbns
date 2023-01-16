@@ -128,8 +128,8 @@ To display the script `find_isbns.py <./find_isbns/scripts/find_isbns.py>`_ list
                                                      (default: ^text/(plain|xml|html)$)
      --isbn-ignored-files REGEX                      This is a regular expression that is matched against the MIME type of 
                                                      the searched files. Matching files are not searched for ISBNs beyond 
-                                                     their filename. By default, it tries to make the subcommands ignore 
-                                                     .gif and .svg images, audio, video and executable files and fonts. 
+                                                     their filename. By default, it tries to ignore .gif and .svg images, 
+                                                     audio, video and executable files and fonts. 
                                                      (default: ^(image/(gif|svg.+)|application/(x-shockwave-flash|CDFV2|
                                                                vnd.ms-opentype|x-font-ttf|x-dosexec|vnd.ms-excel|
                                                                x-java-applet)|audio/.+|video/.+)$)
