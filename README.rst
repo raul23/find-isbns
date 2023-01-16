@@ -309,6 +309,10 @@ The last sequence ``1000100111`` was found in the middle of the document and is
 not an ISBN even though it is a technically valid but wrong ISBN that the
 regular expression `isbn_blacklist_regex <#script-options>`_ didn't catch.
 
+`:information:` If the *pdf* file was made up of images, then the OCR can be applied like this::
+
+ $ find_isbns ~/Data/convert/Book.pdf --ocr true
+
 Through the API
 """""""""""""""
 To find ISBNs in a given document using the API:
@@ -321,7 +325,18 @@ To find ISBNs in a given document using the API:
    isbns = find(os.path.expanduser('~/Data/convert/Archive2.zip'))
    # Do something with `isbns`
 
-`:information_source:` The variable ``isbns`` will contain the ISBNs found in the input *zip* archive.
+`:information_source:` 
+
+- The variable ``isbns`` will contain the ISBNs found in the input *zip* archive.
+- If the *pdf* file was made up of images, then the OCR can be applied like this:
+
+  .. code-block:: python
+
+     import os
+     from find_isbns.lib import find
+   
+     isbns = find(os.path.expanduser('~/Data/convert/Book.pdf'), ocr_enabled='true')
+     # Do something with `isbns`
 
 Cases tested
 ============
