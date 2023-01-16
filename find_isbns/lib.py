@@ -12,12 +12,9 @@ from argparse import Namespace
 from pathlib import Path
 from types import SimpleNamespace
 
-# TODO
-# from convert_to_txt import __version__
-__version__ = '0.1.0'
+from convert_to_txt import __version__
 
-# TODO
-import ipdb
+# import ipdb
 
 logger = logging.getLogger('find_lib')
 logger.setLevel(logging.CRITICAL + 1)
@@ -29,22 +26,20 @@ logger.setLevel(logging.CRITICAL + 1)
 
 # convert_to_txt options
 # ======================
-CONVERT_PAGES = None
 DJVU_CONVERT_METHOD = 'djvutxt'
 EPUB_CONVERT_METHOD = 'epubtxt'
-MSWORD_CONVERT_METHOD = 'textutil'
+MSWORD_CONVERT_METHOD = 'textutil'  # not supported in script `find_isbns`
 PDF_CONVERT_METHOD = 'pdftotext'
 
 # Finding ISBNs options
+# =====================
 ISBN_REGEX = '(?<![0-9])(-?9-?7[789]-?)?((-?[0-9]-?){9}[0-9xX])(?![0-9])'
 ISBN_BLACKLIST_REGEX = '^(0123456789|([0-9xX])\\2{9})$'
 ISBN_DIRECT_FILES = '^text/(plain|xml|html)$'
 ISBN_IGNORED_FILES = '^(image/(gif|svg.+)|application/(x-shockwave-flash|CDFV2|vnd.ms-opentype|x-font-ttf|x-dosexec|' \
                      'vnd.ms-excel|x-java-applet)|audio/.+|video/.+)$'
-ISBN_RF_SCAN_FIRST = 400
-ISBN_RF_REVERSE_LAST = 50
 # False to disable the functionality or (first_lines,last_lines) to enable it
-ISBN_REORDER_FILES = (ISBN_RF_SCAN_FIRST, ISBN_RF_REVERSE_LAST)
+ISBN_REORDER_FILES = [400, 50]
 ISBN_RET_SEPARATOR = '\n'
 # NOTE: If you use Calibre versions that are older than 2.84, it's required to
 # manually set the following option to an empty string
@@ -187,71 +182,6 @@ def convert_result_from_shell_cmd(old_result):
     return new_result
 
 
-def convert(input_file, output_file=None,
-            convert_pages=CONVERT_PAGES,
-            **kwargs):
-    # also setup cache outside
-    func_params = locals().copy()
-    file_hash = None
-    mime_type = get_mime_type(input_file)
-    if mime_type == 'text/plain':
-        logger.warning(yellow('The file is already in .txt'))
-        # Return text if no output file was specified
-        if output_file is None:
-            with open(input_file, 'r') as f:
-                text = f.read()
-            return text
-        else:
-            return 0
-    return_txt = False
-    # Create temp output file if output file not specified by user
-    if output_file is None:
-        return_txt = True
-        output_file = tempfile.mkstemp(suffix='.txt')[1]
-    else:
-        output_file = Path(output_file)
-        # Check first that the output text file is valid
-        if output_file.suffix != '.txt':
-            logger.error(red("The output file needs to have a .txt extension!"))
-            return 1
-        # Create output file text if it doesn't exist
-        if output_file.exists():
-            logger.warning(f"{yellow('Output text file already exists:')} {output_file.name}")
-            logger.debug(f"Full path of output text file: '{output_file.absolute()}'")
-        else:
-            # Create output text file
-            touch(output_file)
-    func_params['mime_type'] = mime_type
-    func_params['output_file'] = output_file
-    logger.info("Starting conversion to txt...")
-    result = convert_to_txt(**func_params)
-    statuscode = result.returncode
-    if statuscode == 0:
-        logger.info('Conversion terminated')
-    # Check conversion
-    logger.debug('Checking converted text...')
-    if statuscode == 0 and isalnum_in_file(output_file):
-        logger.debug("Converted text is valid!")
-    else:
-        logger.error(red("Conversion failed!"))
-        logger.error(red(f'The converted txt with size {os.stat(output_file).st_size} '
-                         'bytes does not seem to contain text'))
-        # Only remove output file if it is a temp file (i.e. return_txt = True)
-        if return_txt:
-            remove_file(output_file)
-        return 1
-    logger.info(blue("Conversion successful!"))
-    # Only remove output file if it is a temp file (i.e. return_txt = True)
-    if return_txt:
-        with open(output_file, 'r', encoding="utf8", errors='ignore') as f:
-            text = f.read()
-        assert text
-        remove_file(output_file)
-        return text
-    else:
-        return 0
-
-
 # Tries to convert the supplied ebook file into .txt. It uses calibre's
 # ebook-convert tool. For optimization, if present, it will use pdftotext
 # for pdfs, catdoc for word files and djvutxt for djvu files.
@@ -332,8 +262,6 @@ def extract_archive(input_file, output_file):
 def find(input_data, isbn_blacklist_regex=ISBN_BLACKLIST_REGEX,
          isbn_direct_files=ISBN_DIRECT_FILES,
          isbn_reorder_files=ISBN_REORDER_FILES,
-         isbn_rf_reverse_last=ISBN_RF_REVERSE_LAST,
-         isbn_rf_scan_first=ISBN_RF_SCAN_FIRST,
          isbn_ignored_files=ISBN_IGNORED_FILES,
          isbn_regex=ISBN_REGEX,
          isbn_ret_separator=ISBN_RET_SEPARATOR,
@@ -351,7 +279,7 @@ def find(input_data, isbn_blacklist_regex=ISBN_BLACKLIST_REGEX,
             logger.debug(f'The input data is a file path')
             isbns = search_file_for_isbns(input_data, **func_params)
         else:
-            logger.debug(f'The input data is a string')
+            logger.debug(f'The input data might be a string')
             isbns = find_isbns(input_data, **func_params)
     except OSError as e:
         if e.args[0]:
@@ -411,8 +339,6 @@ def get_all_isbns_from_archive(
         file_path, isbn_blacklist_regex=ISBN_BLACKLIST_REGEX,
         isbn_direct_files=ISBN_DIRECT_FILES,
         isbn_reorder_files=ISBN_DIRECT_FILES,
-        isbn_rf_reverse_last=ISBN_RF_REVERSE_LAST,
-        isbn_rf_scan_first=ISBN_RF_SCAN_FIRST,
         isbn_ignored_files=ISBN_IGNORED_FILES, isbn_regex=ISBN_REGEX,
         isbn_ret_separator=ISBN_RET_SEPARATOR, ocr_command=OCR_COMMAND,
         ocr_enabled=OCR_ENABLED,
@@ -464,7 +390,7 @@ def get_all_isbns_from_archive(
 
 def get_ebook_metadata(file_path):
     # TODO: add `ebook-meta` in PATH, right now it is only working for mac
-    cmd = f'/Applications/calibre.app/Contents/MacOS/ebook-meta "{file_path}"'
+    cmd = f'ebook-meta "{file_path}"'
     args = shlex.split(cmd)
     result = subprocess.run(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     return convert_result_from_shell_cmd(result)
@@ -507,6 +433,45 @@ def get_pages_in_pdf(file_path, cmd='mdls'):
     return convert_result_from_shell_cmd(result)
 
 
+# Checks if directory is empty
+# Ref.: https://stackoverflow.com/a/47363995
+def is_dir_empty(path):
+    return next(os.scandir(path), None) is None
+
+
+# Validates ISBN-10 and ISBN-13 numbers
+# Ref.: https://bit.ly/2HO2lMD
+def is_isbn_valid(isbn):
+    # TODO: there is also a Python package for validating ISBNs (but dependency)
+    # Remove whitespaces (space, tab, newline, and so on), '-', and capitalize all
+    # characters (ISBNs can consist of numbers [0-9] and the letters [xX])
+    isbn = ''.join(isbn.split())
+    isbn = isbn.replace('-', '')
+    isbn = isbn.upper()
+
+    sum = 0
+    # Case 1: ISBN-10
+    if len(isbn) == 10:
+        for i in range(len(isbn)):
+            if i == 9 and isbn[i] == 'X':
+                number = 10
+            else:
+                number = int(isbn[i])
+            sum += (number * (10 - i))
+        if sum % 11 == 0:
+            return True
+    # Case 2: ISBN-13
+    elif len(isbn) == 13:
+        if isbn[0:3] in ['978', '979']:
+            for i in range(0, len(isbn), 2):
+                sum += int(isbn[i])
+            for i in range(1, len(isbn), 2):
+                sum += (int(isbn[i])*3)
+            if sum % 10 == 0:
+                return True
+    return False
+
+
 def isalnum_in_file(file_path):
     with open(file_path, 'r', encoding="utf8", errors='ignore') as f:
         isalnum = False
@@ -518,12 +483,6 @@ def isalnum_in_file(file_path):
             if isalnum:
                 break
     return isalnum
-
-
-# Checks if directory is empty
-# Ref.: https://stackoverflow.com/a/47363995
-def is_dir_empty(path):
-    return next(os.scandir(path), None) is None
 
 
 def namespace_to_dict(ns):
@@ -680,7 +639,6 @@ def remove_file(file_path):
 # Recursively delete a directory tree, including the parent directory
 # Ref.: https://stackoverflow.com/a/186236
 def remove_tree(file_path):
-    # TODO:
     try:
         shutil.rmtree(file_path)
         return 0
@@ -696,10 +654,10 @@ def remove_tree(file_path):
 # TODO: order params and other places
 def reorder_file_content(
         file_path,
-        isbn_reorder_files=ISBN_REORDER_FILES,
-        isbn_rf_scan_first=ISBN_RF_SCAN_FIRST,
-        isbn_rf_reverse_last=ISBN_RF_REVERSE_LAST, **kwargs):
+        isbn_reorder_files=ISBN_REORDER_FILES, **kwargs):
     if isbn_reorder_files:
+        isbn_rf_scan_first = isbn_reorder_files[0]
+        isbn_rf_reverse_last = isbn_reorder_files[1]
         logger.debug('Reordering input file (if possible), read first '
                      f'{isbn_rf_scan_first} lines normally, then read '
                      f'last {isbn_rf_reverse_last} lines in reverse and '
@@ -731,7 +689,7 @@ def reorder_file_content(
             data = first_part + last_part + middle_part
             data = "".join(data)
     else:
-        logger.debug('Since isbn_reorder_files is False, input file will '
+        logger.debug('Since `isbn_reorder_file`s is False, input file will '
                      'not be reordered')
         with open(file_path, 'r') as f:
             # TODO: do we remove newlines? e.g. with f.read().rstrip("\n")
@@ -761,8 +719,6 @@ def search_file_for_isbns(
         file_path, isbn_blacklist_regex=ISBN_BLACKLIST_REGEX,
         isbn_direct_files=ISBN_DIRECT_FILES,
         isbn_reorder_files=ISBN_REORDER_FILES,
-        isbn_rf_reverse_last=ISBN_RF_REVERSE_LAST,
-        isbn_rf_scan_first=ISBN_RF_SCAN_FIRST,
         isbn_ignored_files=ISBN_IGNORED_FILES, isbn_regex=ISBN_REGEX,
         isbn_ret_separator=ISBN_RET_SEPARATOR, ocr_command=OCR_COMMAND,
         ocr_enabled=OCR_ENABLED,
@@ -843,8 +799,8 @@ def search_file_for_isbns(
             else:
                 logger.debug('Did not find any ISBNs and will NOT try OCR')
     else:
-        logger.info('There was an error converting the book to txt format')
-        logger.debug(result.stderr)
+        logger.warning(yellow('There was an error converting the book to txt format:'))
+        logger.warning(yellow(result.stderr))
         try_ocr = True
 
     # Step 7: OCR the file
@@ -906,6 +862,18 @@ def setup_log(quiet=False, verbose=False, logging_level=LOGGING_LEVEL,
         logger.debug("Verbose option {}".format("enabled" if verbose else "disabled"))
 
 
+# OCR: convert image to text
+def tesseract_wrapper(input_file, output_file):
+    cmd = f'tesseract "{input_file}" stdout --psm 12'
+    args = shlex.split(cmd)
+    result = subprocess.run(args,
+                            stdout=open(output_file, 'w'),
+                            stderr=subprocess.PIPE,
+                            encoding='utf-8',
+                            bufsize=4096)
+    return convert_result_from_shell_cmd(result)
+
+
 # macOS equivalent for catdoc
 # See https://stackoverflow.com/a/44003923/14664104
 def textutil(input_file, output_file):
@@ -919,36 +887,3 @@ def touch(path, mode=0o666, exist_ok=True):
     logger.debug(f"Creating file: '{path}'")
     Path(path).touch(mode, exist_ok)
     logger.debug("File created!")
-
-
-# Validates ISBN-10 and ISBN-13 numbers
-# Ref.: https://bit.ly/2HO2lMD
-def is_isbn_valid(isbn):
-    # TODO: there is also a Python package for validating ISBNs (but dependency)
-    # Remove whitespaces (space, tab, newline, and so on), '-', and capitalize all
-    # characters (ISBNs can consist of numbers [0-9] and the letters [xX])
-    isbn = ''.join(isbn.split())
-    isbn = isbn.replace('-', '')
-    isbn = isbn.upper()
-
-    sum = 0
-    # Case 1: ISBN-10
-    if len(isbn) == 10:
-        for i in range(len(isbn)):
-            if i == 9 and isbn[i] == 'X':
-                number = 10
-            else:
-                number = int(isbn[i])
-            sum += (number * (10 - i))
-        if sum % 11 == 0:
-            return True
-    # Case 2: ISBN-13
-    elif len(isbn) == 13:
-        if isbn[0:3] in ['978', '979']:
-            for i in range(0, len(isbn), 2):
-                sum += int(isbn[i])
-            for i in range(1, len(isbn), 2):
-                sum += (int(isbn[i])*3)
-            if sum % 10 == 0:
-                return True
-    return False
