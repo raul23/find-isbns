@@ -1,3 +1,11 @@
+"""
+The script find_isbns.py finds ISBNs from ebooks (pdf, djvu, epub) or any string
+given as input to the script .
+
+It is based on the great ebook-tools which is written in shell by na--.
+
+Ref.: https://github.com/na--/ebook-tools
+"""
 import argparse
 import codecs
 import logging
