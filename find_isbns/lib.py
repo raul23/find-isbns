@@ -289,9 +289,10 @@ def find(input_data, isbn_blacklist_regex=ISBN_BLACKLIST_REGEX,
             raise e
     if isbns:
         logger.info(f"Extracted ISBNs:\n{isbns}")
+        return isbns
     else:
         logger.info("No ISBNs could be found!")
-    return 0
+        return None
 
 
 # Searches the input string for ISBN-like sequences and removes duplicates and
