@@ -278,5 +278,5 @@ Cases tested
 - *pdf* documents 
 - *djvu* documents 
 - *epub* documents
-- image using the ``--ocr true`` option
+- *png* images using the ``--ocr true`` option
 - *zip* archives with duplicate documents
