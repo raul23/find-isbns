@@ -196,6 +196,8 @@ Examples
 ========
 Find ISBNs in a string
 ----------------------
+Through the script ``find_isbns.py``
+""""""""""""""""""""""""""""""""""""
 Find ISBNs in the string ``'978-159420172-1 978-1892391810 0000000000 0123456789 1111111111'``:
 
 .. code-block:: terminal
@@ -246,9 +248,41 @@ backslash ``\`` and enclose the string within **double quotes**, like so:
    blablabla
    blablabla
    "
+   
+Through the API
+"""""""""""""""
+To find ISBNs in a string using the API:
+
+.. code-block:: python
+
+   from find_isbns.lib import find
+
+   isbns = find('dsadasd9781892391810 sdafdf3143 978-159420172-1fdfd', isbn_ret_separator=' - ')
+   # Do something with `isbns`
+
+`:information_source:` The variable ``isbns`` will contain the two ISBNs found in the input string::
+
+ '9781892391810 - 9781594201721'
+ 
+By `default <#script-options>`_, the extracted ISBNs are separated by '\n'. However, with the parameter ``isbn_ret_separator``
+you can choose your own separator.
+
+By default when using the API, the loggers are disabled. If you want to enable them, call the
+function ``setup_log()`` (with the desired log level in all caps) at the beginning of your code before 
+the conversion function ``convert()``:
+
+.. code-block:: python
+
+   from find_isbns.lib import find
+
+   setup_log(logging_level='DEBUG')
+   isbns = find('dsadasd9781892391810 sdafdf3143 978-159420172-1fdfd', isbn_ret_separator=' - ')
+   # Do something with `isbns`
 
 Find ISBNs in a pdf file
 ------------------------
+Through the script ``find_isbns.py``
+""""""""""""""""""""""""""""""""""""
 .. code-block:: terminal
 
    $ find_isbns pdf_file.pdf
@@ -272,6 +306,20 @@ associated with the book since it was found in the first page.
 The last sequence ``1000100111`` was found in the middle of the document and is
 not an ISBN even though it is a technically valid but wrong ISBN that the
 regular expression `isbn_blacklist_regex <#script-options>`_ didn't catch.
+
+Through the API
+"""""""""""""""
+To find ISBNs in a given document using the API:
+
+.. code-block:: python
+
+   import os
+   from find_isbns.lib import find
+   
+   isbns = find(os.path.expanduser('~/Data/convert/Archive2.zip'))
+   # Do something with `isbns`
+
+`:information_source:` The variable ``isbns`` will contain the ISBNs found in the input *zip* archive.
 
 Cases tested
 ============
