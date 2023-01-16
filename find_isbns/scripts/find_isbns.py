@@ -5,7 +5,7 @@ given as input to the script .
 Searching for ISBNs in files uses progressively more resource-intensive methods
 until some ISBNs are found, see the `documentation` for more details.
 
-This is a Python port of `find-isbns.sh` from `ebook-tools` written in Shell
+This is a Python port of `find-isbns.sh` from `ebook-tools` written in shell
 by `na--`.
 
 Ref.: https://github.com/na--/ebook-tools
