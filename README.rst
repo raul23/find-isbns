@@ -16,11 +16,27 @@ TODO
 
 Installation
 ============
-TODO
+To install the `find_isbns <./find_isbns/>`_ package::
+
+ $ pip install git+https://github.com/raul23/find-isbns#egg=find-isbns
+ 
+**Test installation**
+
+1. Test your installation by importing ``find_isbns`` and printing its
+   version::
+
+   $ python -c "import find_isbns; print(find_isbns.__version__)"
+
+2. You can also test that you have access to the ``find_isbns.py`` script by
+   showing the program's version::
+
+   $ find_isbns --version
 
 Uninstall
 =========
-TODO
+To uninstall the `find_isbns <./find_isbns/>`_ package::
+
+ $ pip uninstall find_isbns
 
 Script options
 ==============
