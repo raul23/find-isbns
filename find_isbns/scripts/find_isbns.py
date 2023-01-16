@@ -256,9 +256,9 @@ def setup_argparser():
         default=ISBN_IGNORED_FILES,
         help='''This is a regular expression that is matched against the MIME
             type of the searched files. Matching files are not searched for ISBNs
-            beyond their filename. By default, it tries to make the subcommands
-            ignore .gif and .svg images, audio, video and executable files and
-            fonts.''' + get_default_message(ISBN_IGNORED_FILES))
+            beyond their filename. By default, it tries to ignore .gif and .svg
+            images, audio, video and executable files and fonts.'''
+             + get_default_message(ISBN_IGNORED_FILES))
     find_group.add_argument(
         "--reorder-files", dest='isbn_reorder_files', nargs='+',
         action=required_length(1, 2), metavar='LINES', default=ISBN_REORDER_FILES,
