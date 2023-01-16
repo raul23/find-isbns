@@ -202,7 +202,7 @@ def setup_argparser():
     desc_msg = 'Find valid ISBNs inside a file or in a string if no file was ' \
                'specified. \nSearching for ISBNs in files uses progressively more ' \
                'resource-intensive methods until some ISBNs are found.\n\n' \
-               'This script is based on the great ebook-tools written in Shell ' \
+               'This script is based on the great ebook-tools written in shell ' \
                'by na-- (See https://github.com/na--/ebook-tools).'
     parser = ArgumentParser(
         description="",
