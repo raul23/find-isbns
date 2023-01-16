@@ -219,7 +219,7 @@ The input string must be enclosed within single or double quotes.
 The other sequences ``'0000000000 0123456789 1111111111'`` are rejected because
 they are matched with the regular expression `isbn_blacklist_regex <#script-options>`_.
 
-By `default <#script-options>`__, the extracted ISBNs are separated by newlines, ``\n``.
+By `default <#script-options>`__, the extracted ISBNs are separated by newlines, `\\n``.
 
 |
 
