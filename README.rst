@@ -8,7 +8,7 @@ It is based on the great `ebook-tools <https://github.com/na--/ebook-tools>`_ wh
 
  "Searching for ISBNs in files uses progressively more resource-intensive methods until some ISBNs are found."
 
-If the ebook is made up of images, then **OCR** is run on select part of the document to find its ISBNs.
+If the ebook is made up of images, then **OCR** is run on specific parts of the document to find its ISBNs.
 
 Thus, `find_isbns <./find_isbns>`_ is a Python port of the parts of the shell scripts from ``ebook-tools`` that are 
 related to finding ISBNs from ebooks.
