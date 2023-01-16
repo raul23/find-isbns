@@ -13,6 +13,13 @@ Thus if the ebook is made up of images, then **OCR** is run on specific parts of
 `find_isbns <./find_isbns>`_ is a Python port of the parts of the shell scripts from ``ebook-tools`` that are 
 related to finding ISBNs from ebooks.
 
+|
+
+`:star:` Other related projects that I ported from ``ebook-tools`` to Python:
+
+- `convert-to-txt <https://github.com/raul23/convert-to-txt>`_: convert documents (pdf, djvu, epub, word) to txt
+- `ocr <https://github.com/raul23/ocr>`_: OCR documents (pdf, djvu, and images)
+
 .. contents:: **Contents**
    :depth: 3
    :local:
