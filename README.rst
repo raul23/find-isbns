@@ -118,7 +118,11 @@ To display the script `find_isbns.py <./find_isbns/scripts/find_isbns.py>`_ list
 
 How the script ``find_isbns`` finds ISBN
 ========================================
+For more details, see:
 
+- The `documentation <https://github.com/na--/ebook-tools#searching-for-isbns-in-files>`_ for ``ebook-tools`` (shell scripts) or
+- `search_file_for_isbns() <https://github.com/raul23/find-isbns/blob/926cbb49f8e97b6f71526bcaef5c810805ccad99/find_isbns/lib.py#L702>`_ 
+  from ``lib.py`` (Python function where ISBNs search in files is implemented).
 
 Examples
 ========
