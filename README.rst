@@ -344,10 +344,9 @@ To find ISBNs in a given document using the API:
 
 .. code-block:: python
 
-   import os
    from find_isbns.lib import find
    
-   isbns = find(os.path.expanduser('~/Data/convert/Archive2.zip'))
+   isbns = find('/Users/test/Data/convert/Archive2.zip')
    # Do something with `isbns`
 
 `:information_source:` Explaining the snippet of code
@@ -358,10 +357,9 @@ To find ISBNs in a given document using the API:
 
   .. code-block:: python
 
-     import os
      from find_isbns.lib import find
    
-     isbns = find(os.path.expanduser('~/Data/convert/Book.pdf'), ocr_enabled='true')
+     isbns = find('/Users/test/Data/convert/Book.pdf', ocr_enabled='true')
      # Do something with `isbns`
 
 Cases tested
