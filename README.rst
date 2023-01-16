@@ -152,10 +152,15 @@ To display the script `find_isbns.py <./find_isbns/scripts/find_isbns.py>`_ list
                                                      when OCR-ing ebooks. (default:7 3)
 
    Input data:
-     input_data                                      Can either be the path to a file or a string. The input will be searched for ISBNs.
+     input_data                                      Can either be the path to a file or a string (enclose it within single or double 
+                                                     quotes if it contains spaces). The input will be searched for ISBNs.
 
-`:information_source:` Since the program ``find_isbns`` is based on the shell suite of scripts 
-`ebook-tools <https://github.com/na--/ebook-tools>`_, the descriptions for the options are from ``ebook-tools``.
+`:information_source:` 
+
+- Since the program ``find_isbns`` is based on the shell suite of scripts `ebook-tools <https://github.com/na--/ebook-tools>`_, the descriptions for the options are from ``ebook-tools``.
+- The input string must be enclosed within single or double quotes if it contains *spaces*, like so::
+
+   $ find_isbns '978-159420172-1 978-1892391810 0000000000 0123456789 1111111111'
 
 How the script ``find_isbns`` finds ISBN
 ========================================
@@ -191,11 +196,80 @@ Examples
 ========
 Find ISBNs in a string
 ----------------------
-TODO
+Find ISBNs in the string ``'978-159420172-1 978-1892391810 0000000000 0123456789 1111111111'``:
+
+.. code-block:: terminal
+
+   $ find_isbns '978-159420172-1 978-1892391810 0000000000 0123456789 1111111111'
+
+The input string must be enclosed within single or double quotes.
+
+**Output:**
+
+.. code-block:: terminal
+
+   Extracted ISBNs:
+   9781594201721
+   9781892391810
+
+The other sequences ``'0000000000 0123456789 1111111111'`` are rejected because
+they are matched with the regular expression `isbn_blacklist_regex <#script-options>`_.
+
+By `default <#script-options>`__, the extracted ISBNs are separated by newlines, ``\n``.
+
+`:information_source:`
+
+  If you want to search ISBNs in a **multiple-lines string**, e.g. you copied
+  many pages from a document, you must follow ``find_isbns`` with a
+  backslash ``\`` and enclose the string within **double quotes**, like so:
+  
+  .. code-block:: terminal
+
+     $ find_isbns \
+     "
+     978-159420172-1
+     
+     blablabla
+     blablabla
+     blablabla
+     
+     978-1892391810
+     0000000000 0123456789 
+     
+     blablabla
+     blablabla
+     blablabla
+     
+     1111111111
+     blablabla
+     blablabla
+     "
 
 Find ISBNs in a pdf file
 ------------------------
-TODO
+.. code-block:: terminal
+
+   $ find_isbns pdf_file.pdf
+   
+**Output:**
+
+.. code-block:: terminal
+
+   Searching file 'pdf_file.pdf' for ISBN numbers...
+   Extracted ISBNs:
+   9789580158448
+   1000100111
+
+The search for ISBNs starts in the first pages of the document to increase the
+likelihood that the first extracted ISBN is the correct one. Then the last
+pages are analyzed in reverse. Finally, the rest of the pages are searched.
+
+Thus, in this example, the first extracted ISBN is the correct one
+associated with the book since it was found in the first page. 
+
+The last sequence ``1000100111`` was found in the middle of the document and is
+not an ISBN even though it is a technically valid but wrong ISBN that the
+regular expression `isbn_blacklist_regex <#script-options>`_ didn't catch.
 
 Cases tested
 ============
