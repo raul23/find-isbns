@@ -1,3 +1,12 @@
+"""Library that has useful functions for building other ebook management tools.
+
+This is a Python port of `find-isbns.sh` and `lib.sh`_ from `ebook-tools` written in shell by
+`na--`.
+
+Ref.: 
+- https://github.com/na--/ebook-tools/blob/master/find-isbns.sh
+- https://github.com/na--/ebook-tools/blob/master/lib.sh
+"""
 import ast
 import logging
 import mimetypes
