@@ -184,9 +184,16 @@ Here are the steps followed by ``find_isbns`` to find ISBNs in files or string:
    v. If the conversion failed and OCR is enabled, OCR is run on the file and the resultant text file
       is searched for ISBNs
       
-`:information_source:` When searching the content of an ebook, by default, the first 400 lines are searched for any
-ISBNs, then the last 50 lines **in reverse**, and finally the middle. This is done in order to maximize the chances that
-the extracted ISBNs are really related to the given ebook analyzed and not from other books mentioned in the middle of the text.
+`:information_source:` Some details given
+
+- When searching the content of an ebook, by default, the first 400 lines are searched for any
+  ISBNs, then the last 50 lines **in reverse**, and finally the middle. This is done in order to maximize the chances that
+  the extracted ISBNs are really related to the given ebook analyzed and not from other books mentioned in the middle of the text.
+  
+  The option `--reorder-files <#script-options>`_ controls the number of lines at the beginning and end of the document
+  that will be searched for ISBNs.
+- By default, only the first 7 and last 3 pages of a given document are OCRed. The option `--ocr-only-first-last-pages <#script-options>`_
+  controls these numbers of pages.
 
 For more details, see:
 
@@ -328,7 +335,8 @@ To find ISBNs in a given document using the API:
 `:information_source:` 
 
 - The variable ``isbns`` will contain the ISBNs found in the input *zip* archive.
-- If the *pdf* file was made up of images, then the OCR can be applied like this:
+- If the *pdf* file was made up of images, then the OCR can be applied by setting the parameter ``ocr_enabled`` to 'true'
+  for the ``find()`` function:
 
   .. code-block:: python
 
