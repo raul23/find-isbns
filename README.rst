@@ -217,6 +217,8 @@ they are matched with the regular expression `isbn_blacklist_regex <#script-opti
 
 By `default <#script-options>`__, the extracted ISBNs are separated by newlines, ``\n``.
 
+|
+
 `:information_source:` Multiple-lines string
 
 If you want to search ISBNs in a **multiple-lines string**, e.g. you copied
