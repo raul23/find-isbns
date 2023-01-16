@@ -1,19 +1,17 @@
 import argparse
+import codecs
 import logging
 import os
 
-# TODO
-# from find_isbns import __version__
-__version__ = '0.1.0'
-# TODO
-# from find_isbns.lib import (find, setup_log, blue, green, red, yellow,
-from lib import (find, namespace_to_dict, setup_log, blue, green, red, yellow,
-                 ISBN_REGEX, ISBN_BLACKLIST_REGEX, ISBN_DIRECT_FILES,
-                 ISBN_IGNORED_FILES, ISBN_REORDER_FILES,
-                 LOGGING_FORMATTER, LOGGING_LEVEL)
+from find_isbns import __version__
+from find_isbns.lib import (find, namespace_to_dict, setup_log, blue, green, red, yellow,
+                            DJVU_CONVERT_METHOD, EPUB_CONVERT_METHOD, PDF_CONVERT_METHOD,
+                            ISBN_REGEX, ISBN_BLACKLIST_REGEX, ISBN_DIRECT_FILES,
+                            ISBN_IGNORED_FILES, ISBN_REORDER_FILES, ISBN_RET_SEPARATOR,
+                            OCR_ENABLED, OCR_ONLY_FIRST_LAST_PAGES,
+                            LOGGING_FORMATTER, LOGGING_LEVEL)
 
-# TODO
-import ipdb
+# import ipdb
 
 logger = logging.getLogger('find_script')
 
@@ -150,6 +148,11 @@ def add_general_options(parser, add_opts=None, remove_opts=None,
     return parser_general_group
 
 
+# Ref.: https://stackoverflow.com/a/5187097/14664104
+def decode(value):
+    return codecs.decode(value, 'unicode_escape')
+
+
 def get_default_message(default_value):
     return green(f' (default: {default_value})')
 
@@ -190,7 +193,7 @@ def setup_argparser():
     usage_msg = blue(f'%(prog)s [OPTIONS] {{{name_input}}}')
     desc_msg = 'Find valid ISBNs inside a file or in a string if no file was ' \
                'specified. \nSearching for ISBNs in files uses progressively more ' \
-               'resource-intensive methods until some ISBNs are found.\n' \
+               'resource-intensive methods until some ISBNs are found.\n\n' \
                'This script is based on the great ebook-tools written in Shell ' \
                'by na-- (See https://github.com/na--/ebook-tools).'
     parser = ArgumentParser(
@@ -204,6 +207,25 @@ def setup_argparser():
         remove_opts=[],
         program_version=__version__,
         title=yellow('General options'))
+    # ======================
+    # Convert-to-txt options
+    # ======================
+    convert_group = parser.add_argument_group(title=yellow('Convert-to-txt options'))
+    convert_group.add_argument(
+        '--djvu', dest='djvu_convert_method',
+        choices=['djvutxt', 'ebook-convert'], default=DJVU_CONVERT_METHOD,
+        help='Set the conversion method for djvu documents.'
+             + get_default_message(DJVU_CONVERT_METHOD))
+    convert_group.add_argument(
+        '--epub', dest='epub_convert_method',
+        choices=['epubtxt', 'ebook-convert'], default=EPUB_CONVERT_METHOD,
+        help='Set the conversion method for epub documents.'
+             + get_default_message(EPUB_CONVERT_METHOD))
+    convert_group.add_argument(
+        '--pdf', dest='pdf_convert_method',
+        choices=['pdftotext', 'ebook-convert'], default=PDF_CONVERT_METHOD,
+        help='Set the conversion method for pdf documents.'
+             + get_default_message(PDF_CONVERT_METHOD))
     # ==================
     # Find ISBNs options
     # ==================
@@ -237,10 +259,9 @@ def setup_argparser():
             beyond their filename. By default, it tries to make the subcommands
             ignore .gif and .svg images, audio, video and executable files and
             fonts.''' + get_default_message(ISBN_IGNORED_FILES))
-    # TODO: test this option (1 or 2 args)
     find_group.add_argument(
         "--reorder-files", dest='isbn_reorder_files', nargs='+',
-        action=required_length(2, 2), metavar='LINES', default=ISBN_REORDER_FILES,
+        action=required_length(1, 2), metavar='LINES', default=ISBN_REORDER_FILES,
         help='''These options specify if and how we should reorder the ebook
             text before searching for ISBNs in it. By default, the first 400 lines
             of the text are searched as they are, then the last 50 are searched in
@@ -249,9 +270,31 @@ def setup_argparser():
             actually belong to that book (ex. from the copyright section or the
             back cover), instead of being random ISBNs mentioned in the middle of
             the book. No part of the text is searched twice, even if these regions
-            overlap. Set it to `False` to disable the functionality and
+            overlap. Set it to `False` to disable the functionality or
             `first_lines last_lines` to enable it with the specified values.'''
-             + get_default_message(ISBN_REORDER_FILES))
+             + get_default_message(str(ISBN_REORDER_FILES).strip('[|]').replace(',', '')))
+    find_group.add_argument(
+        '--irs', '--isbn-return-separator', dest='isbn_ret_separator',
+        metavar='SEPARATOR', type=decode, default=ISBN_RET_SEPARATOR,
+        help='''This specifies the separator that will be used when returning
+                any found ISBNs.''' +
+             get_default_message(repr(codecs.encode(ISBN_RET_SEPARATOR).decode('utf-8'))))
+    # ===========
+    # OCR options
+    # ===========
+    ocr_group = parser.add_argument_group(title=yellow('OCR options'))
+    ocr_group.add_argument(
+        "--ocr", "--ocr-enabled", dest='ocr_enabled',
+        choices=['always', 'true', 'false'], default=OCR_ENABLED,
+        help='Whether to enable OCR for .pdf, .djvu and image files. It is '
+             'disabled by default.' + get_default_message(OCR_ENABLED))
+    ocr_group.add_argument(
+        "--ocrop", "--ocr-only-first-last-pages",
+        dest='ocr_only_first_last_pages', metavar='PAGES', nargs=2,
+        default=OCR_ONLY_FIRST_LAST_PAGES,
+        help='''Value 'n m' instructs the script to convert only the
+            first n and last m pages when OCR-ing ebooks.'''
+             + get_default_message(str(OCR_ONLY_FIRST_LAST_PAGES).strip('(|)').replace(',', '')))
     # =====
     # Input
     # =====
@@ -280,7 +323,21 @@ def main():
         QUIET = args.quiet
         setup_log(args.quiet, args.verbose, args.logging_level, args.logging_formatter)
         # Actions
-        exit_code = find(**namespace_to_dict(args))
+        error = False
+        args_dict = namespace_to_dict(args)
+        if len(args.isbn_reorder_files) == 1:
+            if args.isbn_reorder_files[0] == 'False':
+                args_dict['isbn_reorder_files'] = False
+            else:
+                logger.error(f"{red(f'error: invalid choice for reorder-files: ')}"
+                             f"'{args.isbn_reorder_files[0]}' (choose from 'False' or two integers)")
+                exit_code = 1
+                error = True
+        else:
+            args_dict['isbn_reorder_files'][0] = int(args_dict['isbn_reorder_files'][0])
+            args_dict['isbn_reorder_files'][1] = int(args_dict['isbn_reorder_files'][1])
+        if not error:
+            exit_code = find(**args_dict)
     except KeyboardInterrupt:
         print_(yellow('\nProgram stopped!'))
         exit_code = 2
