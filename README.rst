@@ -42,6 +42,8 @@ This is the environment on which the script `find_isbns.py <./find_isbns/scripts
 
 `:information_source:` *epub* is converted to *txt* by using ``unzip -c {input_file}``
 
+|
+
 **Optionally:**
 
 - `calibre <https://calibre-ebook.com/>`_: for converting {*pdf*, *djvu*, *epub*, *msword*} to *txt* by using calibre's own 
