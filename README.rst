@@ -72,7 +72,7 @@ This is the environment on which the script `find_isbns.py <./find_isbns/scripts
     `ebook-convert <https://manual.calibre-ebook.com/generated/en/ebook-convert.html>`_
   
     `:warning:` ``ebook-convert`` is slower than the other conversion tools (``textutil``, ``catdoc``, ``pdftotext``, ``djvutxt``)
-  - for getting an ebook's metadata with ``ebook-metadata`` in order to search it for ISBNs
+  - for getting an ebook's metadata with ``ebook-meta`` in order to search it for ISBNs
 
 Installation
 ============
