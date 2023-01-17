@@ -15,7 +15,7 @@ related to finding ISBNs from ebooks.
 
 |
 
-`:star:` Other related projects based on ``ebook-tools``:
+`:star:` Other related Python projects based on ``ebook-tools``:
 
 - `convert-to-txt <https://github.com/raul23/convert-to-txt>`_: convert documents (pdf, djvu, epub, word) to txt
 - `ocr <https://github.com/raul23/ocr>`_: run OCR on documents (pdf, djvu, and images)
