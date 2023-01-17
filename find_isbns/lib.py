@@ -404,7 +404,7 @@ def get_all_isbns_from_archive(
 
 def get_ebook_metadata(file_path):
     # TODO: add `ebook-meta` in PATH, right now it is only working for mac
-    cmd = f'ebook-metas "{file_path}"'
+    cmd = f'ebook-meta "{file_path}"'
     args = shlex.split(cmd)
     result = subprocess.run(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     return convert_result_from_shell_cmd(result)
@@ -771,7 +771,7 @@ def search_file_for_isbns(
 
     # Step 4: check the file metadata from calibre's `ebook-meta` for ISBNs
     logger.debug("check the file metadata from calibre's `ebook-meta` for ISBNs")
-    if command_exists('ebook-metadata'):
+    if command_exists('ebook-meta'):
         ebookmeta = get_ebook_metadata(file_path)
         logger.debug(f'Ebook metadata:\n{ebookmeta.stdout}')
         isbns = find_isbns(ebookmeta.stdout, **func_params)
@@ -779,7 +779,7 @@ def search_file_for_isbns(
             logger.debug(f"Extracted ISBNs from calibre ebook metadata:\n{isbns}'")
             return isbns
     else:
-        logger.debug("`ebook-metadata` is not found!")
+        logger.debug("`ebook-meta` is not found!")
 
     # Step 5: decompress with 7z
     logger.debug('decompress with 7z')
