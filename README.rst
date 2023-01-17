@@ -18,7 +18,7 @@ related to finding ISBNs from ebooks.
 `:star:` Other related projects based on ``ebook-tools``:
 
 - `convert-to-txt <https://github.com/raul23/convert-to-txt>`_: convert documents (pdf, djvu, epub, word) to txt
-- `ocr <https://github.com/raul23/ocr>`_: OCR documents (pdf, djvu, and images)
+- `ocr <https://github.com/raul23/ocr>`_: run OCR on documents (pdf, djvu, and images)
 - `split-ebooks-into-folders <https://github.com/raul23/split-ebooks-into-folders>`_: split the supplied ebook files into 
   folders with consecutive names
 
