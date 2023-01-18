@@ -22,7 +22,7 @@ related to finding ISBNs from ebooks.
 - `split-ebooks-into-folders <https://github.com/raul23/split-ebooks-into-folders>`_: split the supplied ebook files into 
   folders with consecutive names
 - `organize-ebooks <https://github.com/raul23/organize-ebooks>`_: automatically organize folders with potentially huge amounts of 
-  unorganized ebooks. It leverages the previous Python scripts (minus ``split_into_folders``).
+  unorganized ebooks. It leverages the previous Python scripts (minus ``split_into_folders``)
   
 |
 
