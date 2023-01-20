@@ -2,34 +2,30 @@
 Find ISBNs from ebooks (pdf, djvu, epub)
 ========================================
 The script `find_isbns.py <./find_isbns/scripts/find_isbns.py>`_ finds ISBNs from ebooks (pdf, djvu, epub) or any string given as input 
-to the script . 
-
-It is based on the great `ebook-tools <https://github.com/na--/ebook-tools>`_ which is written in shell by `na-- <https://github.com/na-->`_:
-
- "Searching for ISBNs in files uses progressively more resource-intensive methods until some ISBNs are found."
-
-Thus if the ebook is made up of images, then **OCR** is run on specific parts of the document to find its ISBNs.
-
-`find_isbns <./find_isbns>`_ is a Python port of the parts of the shell scripts from ``ebook-tools`` that are 
-related to finding ISBNs from ebooks.
-
-|
+to the script . It is based on the great `ebook-tools <https://github.com/na--/ebook-tools>`_ which is written in shell by `na-- <https://github.com/na-->`_:
 
 `:star:` Other related Python projects based on ``ebook-tools``:
 
-- `convert-to-txt <https://github.com/raul23/convert-to-txt>`_: convert documents (pdf, djvu, epub, word) to txt
-- `ocr <https://github.com/raul23/ocr>`_: run OCR on documents (pdf, djvu, and images)
-- `split-ebooks-into-folders <https://github.com/raul23/split-ebooks-into-folders>`_: split the supplied ebook files into 
-  folders with consecutive names
-- `organize-ebooks <https://github.com/raul23/organize-ebooks>`_: automatically organize folders with potentially huge amounts of 
-  unorganized ebooks. It leverages the previous Python scripts (minus ``split_into_folders``).
-  
-|
+ - `convert-to-txt <https://github.com/raul23/convert-to-txt>`_: convert documents (pdf, djvu, epub, word) to txt
+ - `ocr <https://github.com/raul23/ocr>`_: run OCR on documents (pdf, djvu, and images)
+ - `split-ebooks-into-folders <https://github.com/raul23/split-ebooks-into-folders>`_: split the supplied ebook files into 
+   folders with consecutive names
+ - `organize-ebooks <https://github.com/raul23/organize-ebooks>`_: automatically organize folders with potentially huge amounts of 
+   unorganized ebooks. It leverages the previous Python scripts (minus ``split_into_folders``).
 
 .. contents:: **Contents**
    :depth: 3
    :local:
    :backlinks: top
+
+About
+=====
+ "Searching for ISBNs in files uses progressively more resource-intensive methods until some ISBNs are found."
+
+Thus if the ebook is made up of images, then **OCR** is run on specific parts of the document to find its ISBNs.
+
+`find_isbns <./find_isbns>`_ is a Python port of the parts of the shell scripts from 
+`ebook-tools <https://github.com/na--/ebook-tools>`_ that are related to finding ISBNs from ebooks.
 
 Dependencies
 ============
