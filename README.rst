@@ -13,11 +13,6 @@ to the script . It is based on the great `ebook-tools <https://github.com/na--/e
  - `organize-ebooks <https://github.com/raul23/organize-ebooks>`_: automatically organize folders with potentially huge amounts of 
    unorganized ebooks. It leverages the previous Python scripts (minus ``split_into_folders``).
 
-.. contents:: **Contents**
-   :depth: 3
-   :local:
-   :backlinks: top
-
 About
 =====
  "Searching for ISBNs in files uses progressively more resource-intensive methods until some ISBNs are found."
