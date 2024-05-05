@@ -69,9 +69,11 @@ This is the environment on which the script `find_isbns.py <./find_isbns/scripts
 
 Installation
 ============
-To install the `find_isbns <./find_isbns/>`_ package::
+1. Install first the `dependencies <#dependencies>`_.
 
- $ pip install git+https://github.com/raul23/find-isbns#egg=find-isbns
+2. Then you can install the `find_isbns <./find_isbns/>`_ package::
+
+   $ pip install git+https://github.com/raul23/find-isbns#egg=find-isbns
  
 **Test installation**
 
